@@ -29,6 +29,9 @@
   position: sticky;
   inset-block-start: 0;
   height: 100svh;
+  /* keep the pinned composition clear of the fixed header — the heading was
+     landing right on the wordmark as the pin settled */
+  padding-block-start: 58px;
   display: flex;
   align-items: center;
   overflow: hidden;

@@ -76,20 +76,29 @@
   transition: color 400ms var(--ease-out);
 }
 
+/* The active label runs vertically along the rail rather than out across the
+   page, so it can never land on top of a section's right-hand column (it used
+   to collide with the archive's STATUS header). Mirrors the left-hand
+   SectionTag. */
 .prail-tick-lbl {
   font-family: var(--f-mono);
   font-size: 0.5rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-4);
+  color: var(--ink-3);
+  white-space: nowrap;
+  position: absolute;
+  /* physical insets on purpose: `writing-mode` below would remap logical
+     inset-* onto the wrong axes */
+  top: 50%;
+  right: 30px;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
   opacity: 0;
-  translate: 0.4rem 0;
+  translate: 0 calc(-50% + 0.45rem);
   transition:
     opacity 320ms var(--ease-out),
     translate 320ms var(--ease-out);
-  position: absolute;
-  inset-inline-end: 46px;
-  white-space: nowrap;
 }
 
 .prail-tick {
@@ -107,7 +116,7 @@
 
 .prail-tick.is-active .prail-tick-lbl {
   opacity: 1;
-  translate: 0 0;
+  translate: 0 -50%;
 }
 
 @media (max-width: 1180px) {

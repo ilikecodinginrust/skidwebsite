@@ -362,10 +362,15 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The comma is set in the display face: the mono comma is a plain slanted
+   wedge at this size and reads as a glitch rather than a glyph. Archivo has a
+   proper curved tail. */
 .odo-digit--sep .odo-glyph {
-  width: 0.44em;
-  translate: 0 0.05em;
-  opacity: 0.5;
+  font-family: var(--f-display);
+  font-weight: 800;
+  width: 0.4em;
+  translate: 0 0.06em;
+  opacity: 0.85;
 }
 
 /* while the wheels are turning the digits run slightly hotter */

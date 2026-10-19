@@ -6,16 +6,19 @@
   --nav-p: 0;
 }
 
+/* The scrim that keeps scrolled content from colliding with the wordmark.
+   It is solid behind the full height of the bar (58px) and only then fades,
+   so nothing ever ghosts through the logo. */
 .nav-plate {
   position: absolute;
   inset-block-start: 0;
   inset-inline: 0;
-  height: 108px;
+  height: 104px;
   background: linear-gradient(
     180deg,
-    rgba(8, 9, 8, 0.97) 0 62%,
-    rgba(8, 9, 8, 0.72) 76%,
-    rgba(8, 9, 8, 0) 100%
+    var(--bg) 0 58px,
+    rgba(8, 9, 8, 0.86) 76px,
+    rgba(8, 9, 8, 0) 104px
   );
   opacity: var(--nav-p);
   transition: opacity 160ms linear;
