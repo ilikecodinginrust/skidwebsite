@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 import { addFrameListener, clamp01 } from '../lib/scroll'
+import { initAudio, isEnabled, playBlip, setEnabled, subscribe } from '../lib/audio'
 import './Nav.css'
 
 const RIGHT = ['CLIENT', 'ARCHIVE', 'v0.1']
@@ -7,6 +8,21 @@ const RIGHT = ['CLIENT', 'ARCHIVE', 'v0.1']
 export default function Nav() {
   const ref = useRef(null)
   const last = useRef(-1)
+  const sound = useSyncExternalStore(subscribe, isEnabled, () => false)
+
+  /* Sound is opt-in. A remembered preference is honoured, but the context is
+     only created/resumed from a real gesture — see lib/audio.js. */
+  useEffect(() => {
+    initAudio()
+  }, [])
+
+  const toggleSound = () => {
+    const next = !isEnabled()
+    /* play the confirmation while the old state is still live */
+    if (!next) playBlip(false)
+    setEnabled(next)
+    if (next) playBlip(true)
+  }
 
   useEffect(
     () =>
@@ -40,6 +56,18 @@ export default function Nav() {
             <i className="nav-flag-dot" />
             NET OFF
           </span>
+
+          <button
+            type="button"
+            className={`nav-sound${sound ? ' is-on' : ''}`}
+            onClick={toggleSound}
+            aria-pressed={sound}
+            aria-label={sound ? 'Turn interface sound off' : 'Turn interface sound on'}
+          >
+            <i className="nav-sound-dot" aria-hidden="true" />
+            SND {sound ? 'ON' : 'OFF'}
+          </button>
+
           {RIGHT.map((item) => (
             <span
               className={`nav-item${item === 'v0.1' ? ' nav-item--acid' : ''}${

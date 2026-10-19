@@ -5,9 +5,12 @@ rebellious: near-black surfaces, acid-lime accents, hairline rules, mono
 micro-labels and oversized editorial type.
 
 **This is a visual showcase only.** Nothing on the page functions. There is no
-navigation, no download, no authentication, no settings and no calls to any
-external service. Every button, toggle, field and menu is drawn decoration.
-The only thing that does anything is scrolling, which drives the animation.
+navigation, no download, no authentication and no calls to any external
+service. Every button, toggle, field and menu is drawn decoration, with a
+single exception: the `SND` control in the header, which switches on an
+optional layer of synthesised interface sound (off by default, generated at
+runtime with the Web Audio API — no audio files, no requests). The other thing
+that does anything is scrolling, which drives the animation.
 
 ## Live site
 
@@ -29,7 +32,9 @@ npm run lint
 React 19 + Vite, plain CSS. No animation library, no CSS framework, no runtime
 dependencies beyond React. Fonts (Archivo, Inter, JetBrains Mono — all SIL OFL
 1.1, see `public/fonts/OFL.txt`) are self-hosted from `public/fonts`, so the
-page makes zero third-party requests at runtime.
+page makes zero third-party requests at runtime. Interface sound is
+synthesised on demand with the Web Audio API (`src/lib/audio.js`), so there are
+no audio files to load either.
 
 ## How the motion works
 
@@ -99,7 +104,13 @@ generated SVG terrain silhouette. No screenshots, no images.
 
 ## Content notice
 
-All client names, archive entries, statuses, build identifiers and statistics
-are invented for the fiction. They are not claims about anyone's code, and
-nothing here implies a partnership, endorsement or affiliation with any real
+The source table in "Skidded from" names well-known Minecraft clients as the
+punchline of the joke. Those names belong to their respective projects and are
+used nominatively — to refer to them, not to claim them.
+
+Everything else is invented: the entry indices, the categories, the statuses,
+the revision numbers, the archive size and every build identifier. The table is
+not a claim that anyone's code was copied, that any project was involved with
+this one, or that any of the listed projects endorsed, approved or even knows
+about it. Nothing here implies a partnership or affiliation with any real
 project.

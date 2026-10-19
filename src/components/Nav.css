@@ -129,6 +129,52 @@
   border-radius: 50%;
 }
 
+/* ---- sound control (the only functional thing on the page) ------------- */
+
+.nav-sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--ink-4);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 220ms var(--ease-out);
+}
+
+.nav-sound:hover {
+  color: var(--ink-2);
+}
+
+.nav-sound:focus-visible {
+  outline: var(--hair) solid var(--acid);
+  outline-offset: 4px;
+}
+
+.nav-sound.is-on {
+  color: var(--acid);
+}
+
+.nav-sound-dot {
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  opacity: 0.45;
+  transition: opacity 220ms var(--ease-out);
+}
+
+.nav-sound.is-on .nav-sound-dot {
+  opacity: 1;
+  animation: nav-pulse 2.6s var(--ease-in-out) infinite;
+}
+
 .nav-hair {
   position: absolute;
   inset-block-end: 0;

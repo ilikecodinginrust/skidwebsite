@@ -4,25 +4,27 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useScrollProgress } from '../hooks/useScrollProgress'
 import { clamp01, segment, setVars } from '../lib/scroll'
 import { ARCHIVE_SIZE, COUNT_MS, REST_OFFSETS, WHEELS } from '../lib/odometer'
+import { playChime, playTick } from '../lib/audio'
 import Odometer from './Odometer'
 import Reveal from './Reveal'
 import SectionTag from './SectionTag'
 import './SkiddedFrom.css'
 
-/* Fictional archive entries. Invented names for invented clients — this is
-   brand lore, not a claim about anyone's code. */
+/* Real client names, used nominatively as the punchline of the joke. The
+   statuses and notes are invented and are not claims about anyone's code,
+   maintainers or release history — see the content notice in the README. */
 const SOURCES = [
-  { name: 'NULLBLOCK', note: 'MOVEMENT SUBROUTINES', status: 'REWRITTEN' },
+  { name: 'WURST', note: 'COMBAT AURA', status: 'REWRITTEN' },
   { name: null, width: 9, note: 'NAME WITHHELD AT SOURCE', status: 'SEALED' },
-  { name: 'PALEHORSE', note: 'HUD PHILOSOPHY', status: 'MERGED' },
-  { name: 'CINDERFALL', note: 'CONFIG SCHEMA', status: 'MERGED' },
-  { name: 'MERIDIAN', note: 'RENDER ORDER', status: 'PARTIAL' },
-  { name: null, width: 6, note: 'REQUESTED REMOVAL', status: 'SEALED' },
-  { name: 'GRAVEYARD.SH', note: 'KEYBIND LAYOUT', status: 'REWRITTEN' },
-  { name: 'NINE-TAIL', note: 'PACKET LAYER', status: 'DISPUTED' },
-  { name: 'OBSIDIAN.TECH', note: 'PANEL GEOMETRY', status: 'MERGED' },
-  { name: 'TIMEBOMB', note: 'TELEMETRY — STRIPPED', status: 'PURGED' },
-  { name: 'HALFLIFE CORE', note: 'ENTITY PROJECTION', status: 'PARTIAL' },
+  { name: 'IMPACT', note: 'HUD PHILOSOPHY', status: 'MERGED' },
+  { name: 'METEOR', note: 'CONFIG SCHEMA', status: 'MERGED' },
+  { name: 'FUTURE', note: 'RENDER ORDER', status: 'PARTIAL' },
+  { name: null, width: 6, note: 'SOURCE NOT IN THE INDEX', status: 'SEALED' },
+  { name: 'RUSHERHACK', note: 'KEYBIND LAYOUT', status: 'REWRITTEN' },
+  { name: 'LAMBDA', note: 'PACKET LAYER', status: 'DISPUTED' },
+  { name: 'KAMI BLUE', note: 'PANEL GEOMETRY', status: 'MERGED' },
+  { name: 'SALHACK', note: 'TELEMETRY — STRIPPED', status: 'PURGED' },
+  { name: 'NOVOLINE', note: 'ENTITY PROJECTION', status: 'PARTIAL' },
   { name: null, width: 12, note: 'NO LONGER MAINTAINED', status: 'SEALED' },
 ]
 
@@ -98,39 +100,62 @@ export default function SkiddedFrom() {
     if (root) setVars(root, REST_VARS)
   }, [paint])
 
+  /* Park at the ceiling, never at zero. The instrument used to reset to
+     000,000, which meant that at every partial scroll position — entering or
+     leaving — the page showed six giant zeros that then flipped to 999,999.
+     Now the resting reading is the finished one and the roll is a replay. */
   const reset = useCallback(() => {
     cancelAnimationFrame(rafRef.current)
-    paint(0)
+    park()
     setPhase('idle')
-  }, [paint])
+  }, [park])
+
+  /* land on the maximum and let the counter speak */
+  const complete = useCallback(() => {
+    const root = rootRef.current
+    if (root) setVars(root, REST_VARS)
+    setPhase('max')
+    playChime()
+  }, [])
 
   const run = useCallback(() => {
     cancelAnimationFrame(rafRef.current)
     setPhase('counting')
 
     const started = performance.now()
+    let lastStep = -1
+
     const tick = (now) => {
       const t = clamp01((now - started) / COUNT_MS)
       paint(t)
 
       if (t < 1) {
+        /* one click per cell crossed, so the roll reads as a mechanism */
+        const step = Math.floor(t * 44)
+        if (step !== lastStep) {
+          lastStep = step
+          playTick(0.5 + (1 - t) * 0.5)
+        }
         rafRef.current = requestAnimationFrame(tick)
       } else {
-        const root = rootRef.current
-        if (root) setVars(root, REST_VARS)
-        setPhase('max')
+        complete()
       }
     }
 
     /* start from zero so the run always reads as a climb to the maximum */
     paint(0)
     rafRef.current = requestAnimationFrame(tick)
-  }, [paint])
+  }, [paint, complete])
 
   /* reduced motion: no run, no flash — just the finished reading */
   useEffect(() => {
     if (reduced) park()
   }, [reduced, park])
+
+  /* the resting state is the ceiling, from the very first paint */
+  useEffect(() => {
+    park()
+  }, [park])
 
   /* start when the instrument is comfortably in view; re-arm once it has left
      the viewport entirely, so the moment can be watched again */
