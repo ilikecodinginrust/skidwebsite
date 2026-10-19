@@ -28,8 +28,8 @@ npm run lint
 
 React 19 + Vite, plain CSS. No animation library, no CSS framework, no runtime
 dependencies beyond React. Fonts (Archivo, Inter, JetBrains Mono — all SIL OFL
-1.1) are self-hosted from `public/fonts`, so the page makes zero third-party
-requests at runtime.
+1.1, see `public/fonts/OFL.txt`) are self-hosted from `public/fonts`, so the
+page makes zero third-party requests at runtime.
 
 ## How the motion works
 
