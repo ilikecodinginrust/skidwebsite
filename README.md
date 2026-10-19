@@ -9,6 +9,11 @@ navigation, no download, no authentication, no settings and no calls to any
 external service. Every button, toggle, field and menu is drawn decoration.
 The only thing that does anything is scrolling, which drives the animation.
 
+## Live site
+
+<https://ilikecodinginrust.github.io/skidwebsite/> — built and published by
+`.github/workflows/deploy.yml` on every push to `main`.
+
 ## Running it
 
 ```bash
