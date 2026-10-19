@@ -1,0 +1,1036 @@
+/* ==========================================================================
+   SKIDDED FROM — the signature section.
+
+   The counter is autonomous: it holds at zero until you are close enough,
+   then runs to 999,999 on a local timer and sets off the flash. Scrolling
+   does not drive the number. The only scroll-linked thing left here is a
+   gentle parallax on the background lattice.
+   ========================================================================== */
+
+.skid {
+  position: relative;
+  background: var(--void);
+}
+
+.skid-stage {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(4.5rem, 12vh, 8rem);
+  overflow: hidden;
+  isolation: isolate;
+
+  /* Defaults live here because this is the element the writers target.
+     Declaring them again further down would shadow the written values. */
+  --count: 0;
+  --settle: 0;
+  --glow: 0.2;
+  --pa: 0;
+  --pb: 0;
+  --pc: 0;
+  --pd: 0;
+  --field: 0;
+}
+
+/* --------------------------------------------------------------------------
+   field
+   -------------------------------------------------------------------------- */
+
+.skid-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.skid-grid {
+  position: absolute;
+  inset: -60px;
+  translate: 0 calc(var(--field) * 1px);
+  background-image:
+    linear-gradient(to right, rgba(240, 241, 235, 0.05) 0 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(240, 241, 235, 0.05) 0 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: radial-gradient(120% 88% at 50% 50%, #000 22%, transparent 78%);
+}
+
+.skid-glow {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  width: min(118vw, 1240px);
+  aspect-ratio: 1.7;
+  translate: -50% -50%;
+  opacity: var(--glow);
+  background: radial-gradient(
+    closest-side,
+    rgba(183, 245, 106, 0.2),
+    rgba(183, 245, 106, 0.07) 42%,
+    transparent 72%
+  );
+}
+
+.skid-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    130% 100% at 50% 50%,
+    transparent 40%,
+    rgba(5, 6, 4, 0.82) 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   composition
+   -------------------------------------------------------------------------- */
+
+.skid-in {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  gap: clamp(1.4rem, 4vh, 3rem);
+}
+
+.skid-head {
+  display: grid;
+  gap: clamp(0.7rem, 2vh, 1.35rem);
+  min-width: 0;
+}
+
+.skid-eyebrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
+  min-width: 0;
+}
+
+.skid-eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--acid);
+  flex: none;
+}
+
+.skid-eyebrow-rule {
+  flex: 1 1 2rem;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--line-lit), var(--line-dim) 70%, transparent);
+  min-width: 1.25rem;
+}
+
+.skid-eyebrow .lbl {
+  white-space: nowrap;
+}
+
+.skid-eyebrow .lbl--dim {
+  color: var(--ink-3);
+}
+
+.skid-title {
+  display: grid;
+  font-size: clamp(1.55rem, 3.3vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.skid-title-a {
+  color: var(--ink);
+}
+
+.skid-title-b {
+  color: var(--ink-2);
+  padding-inline-start: clamp(1.5rem, 8vw, 8rem);
+}
+
+/* --- instrument cluster -------------------------------------------------- */
+
+.skid-instrument {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.7rem, 2vh, 1.25rem);
+  padding-block: clamp(2.2rem, 6.5vh, 3.6rem) clamp(1.8rem, 5vh, 3rem);
+  border-block: var(--hair) solid var(--line);
+  opacity: 0;
+  translate: 0 1.4rem;
+  transition:
+    opacity 700ms var(--ease-out),
+    translate 700ms var(--ease-out);
+}
+
+.skid-stage.is-live .skid-instrument {
+  opacity: 1;
+  translate: none;
+}
+
+.skid-stage.is-max .skid-instrument {
+  border-block-color: var(--acid-line);
+  transition: border-color 900ms var(--ease-out);
+}
+
+.skid-tag {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.skid-tag--tl {
+  inset-block-start: 0.7rem;
+  inset-inline-start: 0;
+}
+
+.skid-tag--tr {
+  inset-block-start: 0.7rem;
+  inset-inline-end: 0;
+}
+
+.skid-tag--bl {
+  inset-block-end: 0.7rem;
+  inset-inline-start: 0;
+}
+
+.skid-tag--br {
+  inset-block-end: 0.7rem;
+  inset-inline-end: 0;
+}
+
+.skid-instrument .skid-tag--tl,
+.skid-instrument .skid-tag--tr {
+  opacity: calc(0.15 + var(--pa) * 0.85);
+}
+
+.skid-instrument .skid-tag--bl {
+  opacity: calc(0.15 + var(--pb) * 0.85);
+}
+
+.skid-instrument .skid-tag--br {
+  opacity: calc(0.15 + var(--pc) * 0.85);
+}
+
+.skid-cross {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  opacity: calc(0.25 + var(--pa) * 0.75);
+}
+
+.skid-cross::before,
+.skid-cross::after {
+  content: '';
+  position: absolute;
+  background: var(--acid-line);
+}
+
+.skid-cross::before {
+  inset-block-start: 5px;
+  inset-inline: 0;
+  height: var(--hair);
+}
+
+.skid-cross::after {
+  inset-inline-start: 5px;
+  inset-block: 0;
+  width: var(--hair);
+}
+
+.skid-cross--tl {
+  inset-block-start: 0.55rem;
+  inset-inline-start: 0.5rem;
+}
+
+.skid-cross--tr {
+  inset-block-start: 0.55rem;
+  inset-inline-end: 0.5rem;
+}
+
+.skid-cross--bl {
+  inset-block-end: 0.55rem;
+  inset-inline-start: 0.5rem;
+}
+
+.skid-cross--br {
+  inset-block-end: 0.55rem;
+  inset-inline-end: 0.5rem;
+}
+
+/* --- the reading: SKIDDED FROM / 999,999 / CLIENTS ----------------------- */
+
+.skid-readout {
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  gap: clamp(0.35rem, 1.4vh, 0.85rem);
+  width: 100%;
+}
+
+.skid-label {
+  font-family: var(--f-mono);
+  font-size: clamp(0.75rem, 1.45vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-indent: 0.36em;
+  text-transform: uppercase;
+  color: var(--acid);
+  text-align: center;
+  line-height: 1;
+  text-shadow: 0 0 calc(var(--glow) * 14px) rgba(183, 245, 106, 0.28);
+  transition: text-shadow 400ms var(--ease-out);
+}
+
+.skid-label--bottom {
+  font-size: clamp(0.8125rem, 1.6vw, 1.3rem);
+}
+
+/* --------------------------------------------------------------------------
+   odometer
+   -------------------------------------------------------------------------- */
+
+.odo {
+  /* one odometer window; the whole counter scales from this single value */
+  --odo-h: clamp(50px, min(16vw, 27vh), 230px);
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.odo-row {
+  display: flex;
+  align-items: center;
+  font-family: var(--f-mono);
+  font-weight: 500;
+  /* cap height lands at ~0.86 of the window, so the wheel reads as solid */
+  font-size: calc(var(--odo-h) * 1.178);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* The window is exactly one cell tall and the wheel is a column of 60 stacked
+   glyphs, so at rest a single digit sits in the frame and while rolling two
+   digits are cut by the frame edges — the way a real counter behaves. */
+.odo-digit {
+  position: relative;
+  height: var(--odo-h);
+  overflow: hidden;
+  display: block;
+  color: color-mix(
+    in srgb,
+    var(--acid) calc(var(--settle) * 100%),
+    rgba(240, 241, 235, 0.82)
+  );
+  text-shadow: 0 0 calc(var(--glow) * 26px) rgba(183, 245, 106, calc(var(--glow) * 0.4));
+}
+
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .odo-digit {
+    color: var(--acid);
+  }
+}
+
+.odo-cellwrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: var(--odo-h);
+  overflow: hidden;
+}
+
+.odo-wheel {
+  display: flex;
+  flex-direction: column;
+  transform: translate3d(0, calc(var(--off, 0) * var(--odo-h) * -1), 0);
+  will-change: transform;
+}
+
+.odo-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--odo-h);
+  width: 0.61em;
+  font-variant-numeric: tabular-nums;
+}
+
+.odo-digit--sep .odo-glyph {
+  width: 0.44em;
+  translate: 0 0.05em;
+  opacity: 0.5;
+}
+
+/* while the wheels are turning the digits run slightly hotter */
+.skid-stage.is-counting .odo-digit {
+  color: color-mix(
+    in srgb,
+    var(--acid) calc(42% + var(--settle) * 58%),
+    rgba(240, 241, 235, 0.9)
+  );
+}
+
+/* --- meter --------------------------------------------------------------- */
+
+.skid-meter {
+  position: relative;
+  display: block;
+  width: min(560px, 74%);
+  height: 2px;
+  background: rgba(240, 241, 235, 0.08);
+  overflow: hidden;
+}
+
+.skid-meter-fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  background: linear-gradient(90deg, var(--acid-deep), var(--acid));
+  transform: scaleX(var(--count));
+  transform-origin: 0 50%;
+}
+
+/* --- the MAX chip -------------------------------------------------------- */
+
+.skid-max {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  translate: 0 -50%;
+  padding: 0.42em 0.7em;
+  background: var(--acid);
+  color: #070a06;
+  font-family: var(--f-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-indent: 0.26em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0;
+  scale: 0.72;
+  pointer-events: none;
+}
+
+.skid-stage.is-max .skid-max {
+  animation: max-chip 900ms var(--ease-spring) 120ms both;
+}
+
+@keyframes max-chip {
+  0% {
+    opacity: 0;
+    scale: 0.72;
+  }
+  40% {
+    opacity: 1;
+    scale: 1.14;
+  }
+  70% {
+    scale: 0.97;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* --- rails --------------------------------------------------------------- */
+
+.skid-rails {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.skid-line {
+  position: absolute;
+  height: var(--hair);
+  width: 50vw;
+}
+
+.skid-line--tl {
+  inset-block-start: -1px;
+  inset-inline-end: 50%;
+  transform-origin: 100% 50%;
+  background: linear-gradient(270deg, var(--acid-line), transparent);
+  transform: scaleX(var(--pb));
+}
+
+.skid-line--tr {
+  inset-block-start: -1px;
+  inset-inline-start: 50%;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--acid-line), transparent);
+  transform: scaleX(var(--pa));
+}
+
+.skid-line--bl {
+  inset-block-end: -1px;
+  inset-inline-end: 50%;
+  transform-origin: 100% 50%;
+  background: linear-gradient(270deg, var(--acid-line), transparent);
+  transform: scaleX(var(--pd));
+}
+
+.skid-line--br {
+  inset-block-end: -1px;
+  inset-inline-start: 50%;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--acid-line), transparent);
+  transform: scaleX(var(--pc));
+}
+
+/* --------------------------------------------------------------------------
+   the flash — the moment the counter hits the ceiling
+   -------------------------------------------------------------------------- */
+
+.skid-burst {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  width: min(84vw, 920px);
+  aspect-ratio: 1.9;
+  translate: -50% -50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.skid-burst i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.skid-burst-core {
+  background: radial-gradient(
+    closest-side,
+    rgba(240, 255, 214, 0.5),
+    rgba(183, 245, 106, 0.28) 40%,
+    transparent 74%
+  );
+}
+
+.skid-burst-ring {
+  border: 1px solid rgba(183, 245, 106, 0.5);
+  border-radius: 50%;
+  background: none;
+}
+
+.skid-burst-rays {
+  inset: -16%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(183, 245, 106, 0.17) 0deg 1.1deg,
+    transparent 1.1deg 11deg
+  );
+  mask-image: radial-gradient(closest-side, transparent 12%, #000 34%, transparent 82%);
+}
+
+.skid-stage.is-max .skid-burst-core {
+  animation: burst-core 1500ms var(--ease-out) both;
+}
+
+.skid-stage.is-max .skid-burst-ring {
+  animation: burst-ring 1500ms var(--ease-out) both;
+}
+
+.skid-stage.is-max .skid-burst-rays {
+  animation: burst-rays 1500ms var(--ease-out) both;
+}
+
+@keyframes burst-core {
+  0% {
+    opacity: 0;
+    scale: 0.32;
+  }
+  16% {
+    opacity: 1;
+    scale: 0.72;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.55;
+  }
+}
+
+@keyframes burst-ring {
+  0% {
+    opacity: 0;
+    scale: 0.28;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.5;
+  }
+}
+
+@keyframes burst-rays {
+  0% {
+    opacity: 0;
+    scale: 0.44;
+    rotate: -7deg;
+  }
+  14% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.38;
+    rotate: 5deg;
+  }
+}
+
+/* the strobe bars sit exactly on the instrument's own rules */
+.skid-flash {
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--acid) 18%,
+    #eaffd0 50%,
+    var(--acid) 82%,
+    transparent
+  );
+}
+
+.skid-flash--t {
+  inset-block-start: -1px;
+}
+
+.skid-flash--b {
+  inset-block-end: -1px;
+}
+
+.skid-stage.is-max .skid-flash {
+  animation: strobe 1250ms linear both;
+}
+
+.skid-stage.is-max .skid-flash--b {
+  animation-delay: 70ms;
+}
+
+@keyframes strobe {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.08;
+  }
+  25% {
+    opacity: 1;
+  }
+  37% {
+    opacity: 0.12;
+  }
+  49% {
+    opacity: 1;
+  }
+  64% {
+    opacity: 0.3;
+  }
+  79% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0.34;
+  }
+}
+
+/* a light sweep across the whole cluster */
+.skid-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    98deg,
+    transparent 38%,
+    rgba(234, 255, 208, 0.42) 50%,
+    transparent 62%
+  );
+}
+
+.skid-stage.is-max .skid-sweep {
+  animation: sweep 1000ms var(--ease-out) both;
+}
+
+@keyframes sweep {
+  0% {
+    transform: translate3d(-115%, 0, 0);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(115%, 0, 0);
+    opacity: 0;
+  }
+}
+
+/* the digits take the hit */
+.skid-stage.is-max .odo-digit {
+  animation: digit-hit 1050ms linear both;
+  animation-delay: calc(var(--j, 0) * 55ms);
+}
+
+@keyframes digit-hit {
+  0% {
+    color: var(--acid);
+    text-shadow: 0 0 0 rgba(234, 255, 208, 0);
+  }
+  8% {
+    color: #f6ffe8;
+    text-shadow: 0 0 24px rgba(183, 245, 106, 0.95);
+  }
+  24% {
+    color: var(--acid);
+    text-shadow: 0 0 10px rgba(183, 245, 106, 0.45);
+  }
+  38% {
+    color: #f6ffe8;
+    text-shadow: 0 0 26px rgba(183, 245, 106, 1);
+  }
+  58% {
+    color: var(--acid);
+    text-shadow: 0 0 8px rgba(183, 245, 106, 0.4);
+  }
+  72% {
+    color: #eaffd0;
+    text-shadow: 0 0 21px rgba(183, 245, 106, 0.88);
+  }
+  100% {
+    color: var(--acid);
+    text-shadow: 0 0 14px rgba(183, 245, 106, 0.34);
+  }
+}
+
+/* the rails and corner marks pulse with the strobe */
+.skid-stage.is-max .skid-line {
+  animation: rail-pulse 1250ms linear both;
+}
+
+.skid-stage.is-max .skid-cross {
+  animation: rail-pulse 1250ms linear 60ms both;
+}
+
+@keyframes rail-pulse {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.35;
+  }
+  60% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+.skid-stage.is-max .skid-label {
+  text-shadow: 0 0 18px rgba(183, 245, 106, 0.55);
+}
+
+.skid-stage.is-max .skid-label--bottom {
+  color: #eaffd0;
+}
+
+/* --------------------------------------------------------------------------
+   the source index
+   -------------------------------------------------------------------------- */
+
+.sources {
+  position: relative;
+  padding-block: clamp(3.5rem, 9vh, 7rem) clamp(4rem, 10vh, 8rem);
+  border-block-start: var(--hair) solid var(--line);
+  background: var(--bg);
+}
+
+.sources-head {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1.05fr) minmax(0, 1.5fr) auto;
+  gap: 1rem;
+  padding-block-end: 0.9rem;
+  border-block-end: var(--hair) solid var(--line-lit);
+}
+
+.sources-head-cell--end {
+  text-align: right;
+}
+
+.sources-list {
+  display: grid;
+}
+
+.source {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1.05fr) minmax(0, 1.5fr) auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: clamp(0.85rem, 1.9vh, 1.25rem);
+  border-block-end: var(--hair) solid var(--line);
+  transition: background-color 320ms var(--ease-out);
+}
+
+.source-idx {
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  color: var(--ink-4);
+  transition: color 320ms var(--ease-out);
+}
+
+.source-name {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: 104%;
+  font-size: clamp(1.0625rem, 1.6vw, 1.625rem);
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 320ms var(--ease-out);
+}
+
+.source-note {
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.source-status {
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  text-align: right;
+  transition: color 320ms var(--ease-out);
+}
+
+.source-status--acid {
+  color: var(--acid-deep);
+}
+
+.source-rule {
+  position: absolute;
+  inset-block-end: -1px;
+  inset-inline-start: 0;
+  width: 100%;
+  height: var(--hair);
+  background: var(--acid);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.source.is-on .source-rule {
+  animation: rule-draw 900ms var(--ease-out) forwards;
+  animation-delay: calc(var(--rv-delay, 0ms) + 90ms);
+}
+
+@media (hover: hover) {
+  .source:hover {
+    background: rgba(183, 245, 106, 0.028);
+  }
+
+  .source:hover .source-idx,
+  .source:hover .source-status,
+  .source:hover .source-name {
+    color: var(--acid);
+  }
+
+  .source:hover .source-rule {
+    transform: scaleX(1);
+    transition: transform 420ms var(--ease-out);
+  }
+}
+
+.sources-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.9rem;
+  padding-block-start: clamp(1.3rem, 3vh, 2rem);
+}
+
+.sources-foot-mark {
+  width: 7px;
+  height: 7px;
+  border: var(--hair) solid var(--acid-line);
+  flex: none;
+}
+
+.sources-foot .lbl {
+  color: var(--ink-3);
+}
+
+.sources-foot .lbl--dim {
+  color: var(--ink-4);
+}
+
+.sources-foot-rule {
+  flex: 1;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--line-lit), transparent);
+  min-width: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .skid-tag--tl .lbl,
+  .skid-tag--tr .lbl {
+    font-size: 0.5rem;
+  }
+
+  .skid-max {
+    inset-block-start: 1.9rem;
+    translate: 0 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .skid-tag--bl,
+  .skid-tag--br {
+    display: none;
+  }
+
+  .skid-rails {
+    display: none;
+  }
+
+  .skid-max {
+    display: none;
+  }
+
+  .sources-head {
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+  }
+
+  .sources-head-cell:nth-child(3) {
+    display: none;
+  }
+
+  .source {
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      'idx name status'
+      'idx note note';
+    row-gap: 0.25rem;
+  }
+
+  .source-idx {
+    grid-area: idx;
+    padding-block-start: 0.28rem;
+  }
+
+  .source-name {
+    grid-area: name;
+  }
+
+  .source-note {
+    grid-area: note;
+    text-transform: none;
+    letter-spacing: 0.1em;
+  }
+
+  .source-status {
+    grid-area: status;
+  }
+}
+
+@media (max-width: 700px) {
+  .skid-eyebrow .lbl--dim {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .skid-tag--tr {
+    display: none;
+  }
+
+  .skid-label {
+    letter-spacing: 0.26em;
+    text-indent: 0.26em;
+  }
+
+  .sources-foot .lbl--dim,
+  .sources-foot-rule {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   reduced motion — the finished reading, held still
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .skid-instrument {
+    opacity: 1 !important;
+    translate: none !important;
+    transition: none;
+  }
+
+  .skid-burst,
+  .skid-flash,
+  .skid-sweep {
+    display: none;
+  }
+
+  .skid-stage.is-max .odo-digit,
+  .skid-stage.is-max .skid-line,
+  .skid-stage.is-max .skid-cross,
+  .skid-stage.is-max .skid-max,
+  .skid-stage.is-max .skid-flash {
+    animation: none !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+  }
+
+  .skid-instrument .skid-tag--tl,
+  .skid-instrument .skid-tag--tr,
+  .skid-instrument .skid-tag--bl,
+  .skid-instrument .skid-tag--br,
+  .skid-cross {
+    opacity: 1 !important;
+  }
+
+  .skid-line {
+    transform: none !important;
+  }
+}

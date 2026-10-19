@@ -1,0 +1,291 @@
+/* ==========================================================================
+   CLOSING — the last composition, and the page footer.
+   ========================================================================== */
+
+.end {
+  position: relative;
+  padding-block: clamp(7rem, 22vh, 15rem) 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.end::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-lit) 40%, transparent);
+}
+
+.end-in {
+  display: grid;
+  gap: clamp(2rem, 6vh, 4rem);
+  position: relative;
+  z-index: 1;
+}
+
+.end-eyebrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
+  min-width: 0;
+}
+
+.end-eyebrow-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--acid);
+  flex: none;
+}
+
+.end-eyebrow-rule {
+  flex: 1 1 2rem;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--line-lit), var(--line-dim) 65%, transparent);
+  min-width: 1.25rem;
+}
+
+.end-eyebrow .lbl {
+  white-space: nowrap;
+}
+
+.end-eyebrow .lbl--dim {
+  color: var(--ink-3);
+}
+
+/* --- statement ----------------------------------------------------------- */
+
+.end-title {
+  display: grid;
+  gap: 0.03em;
+  font-size: clamp(1.6rem, 5.9vw, 6.4rem);
+  line-height: 1;
+  letter-spacing: -0.037em;
+}
+
+.end-sent {
+  display: block;
+}
+
+.end-sent--1 {
+  color: var(--ink-3);
+}
+
+.end-sent--2 {
+  color: var(--ink);
+  padding-inline-start: clamp(0px, 7vw, 7rem);
+}
+
+/* --- the line that crosses the page ------------------------------------- */
+
+.end-rule {
+  position: relative;
+  height: 2px;
+  margin-block: clamp(0.5rem, 3vh, 2rem) clamp(1rem, 4vh, 3rem);
+}
+
+.end-rule-fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(183, 245, 106, 0.12), var(--acid));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.end-rule.is-on .end-rule-fill {
+  animation: rule-draw 1700ms var(--ease-in-out) forwards;
+}
+
+.end-rule-head {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0;
+  width: 5px;
+  height: 5px;
+  translate: -50% -50%;
+  background: var(--acid);
+  opacity: 0;
+}
+
+.end-rule.is-on .end-rule-head {
+  animation: head-run 1700ms var(--ease-in-out) forwards;
+}
+
+@keyframes head-run {
+  0% {
+    inset-inline-start: 0%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    inset-inline-start: 100%;
+    opacity: 0;
+  }
+}
+
+/* --- signature ----------------------------------------------------------- */
+
+.end-sign {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block-end: clamp(3rem, 10vh, 7rem);
+}
+
+.end-mark {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1.8vw, 1.4rem);
+}
+
+.end-cube {
+  width: clamp(28px, 3.2vw, 52px);
+  height: auto;
+  flex: none;
+  fill: none;
+  stroke: var(--line-hi);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.end-cube-acid {
+  stroke: var(--acid);
+  fill: rgba(183, 245, 106, 0.08);
+}
+
+.end-word {
+  font-size: clamp(1.9rem, 5.6vw, 5.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+}
+
+.end-build {
+  display: grid;
+  gap: 0.55rem;
+  padding-block-start: 0.4rem;
+  justify-items: start;
+}
+
+.end-build-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  width: 100%;
+  padding-block-end: 0.45rem;
+  border-block-end: var(--hair) solid var(--line);
+}
+
+.end-build-k {
+  color: var(--ink-4);
+  min-width: 6rem;
+}
+
+.end-build-v {
+  color: var(--acid);
+}
+
+.end-build-v--mute {
+  color: var(--ink-3);
+}
+
+/* --- footer -------------------------------------------------------------- */
+
+.foot {
+  position: relative;
+  border-block-start: var(--hair) solid var(--line);
+}
+
+.foot-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding-block: clamp(1.1rem, 3vh, 1.7rem);
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.foot-sep {
+  padding-inline: 0.5rem;
+  color: var(--line-hi);
+}
+
+.foot-mid {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-3);
+}
+
+.foot-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--acid-deep);
+}
+
+.foot-end {
+  color: var(--ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .end-sign {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .end-eyebrow .lbl--dim {
+    display: none;
+  }
+
+  .end-sent--2 {
+    padding-inline-start: 0;
+  }
+
+  .foot-in {
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    justify-content: flex-start;
+  }
+
+  .foot-copy {
+    flex: 1 1 100%;
+  }
+
+  .foot-mid {
+    order: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .end-rule-fill {
+    transform: scaleX(1) !important;
+    animation: none !important;
+  }
+
+  .end-rule-head {
+    display: none;
+  }
+}

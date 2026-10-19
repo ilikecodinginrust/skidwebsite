@@ -1,0 +1,73 @@
+/* The isometric environment. Strokes use non-scaling-stroke so the lattice
+   stays a hairline no matter how large the SVG is rendered. */
+
+.iso {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.iso path,
+.iso circle {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: square;
+}
+
+.iso-grid {
+  stroke: rgba(240, 241, 235, 0.12);
+  stroke-width: 1;
+}
+
+.iso-foot {
+  fill: rgba(183, 245, 106, 0.05);
+  stroke: var(--acid-line);
+  stroke-width: 1;
+}
+
+.iso-axis {
+  stroke: rgba(183, 245, 106, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 0.18 0.36;
+}
+
+.iso-f {
+  stroke: rgba(183, 245, 106, 0.4);
+  stroke-width: 1;
+}
+
+.iso-f--top {
+  fill: rgba(183, 245, 106, 0.045);
+  stroke: rgba(183, 245, 106, 0.55);
+}
+
+.iso-f--x {
+  stroke: rgba(240, 241, 235, 0.22);
+}
+
+.iso-f--y {
+  stroke: rgba(183, 245, 106, 0.28);
+}
+
+.iso-beacon path {
+  stroke: rgba(183, 245, 106, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 0.16 0.2;
+}
+
+.iso-beacon circle {
+  fill: var(--acid);
+  stroke: none;
+  animation: iso-beacon 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes iso-beacon {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}

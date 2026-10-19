@@ -1,0 +1,80 @@
+/* ==========================================================================
+   TOKENS — every colour, size and timing value used across the page.
+   ========================================================================== */
+
+:root {
+  /* ---- surfaces ---------------------------------------------------- */
+  --void: #050604;
+  --bg: #080908;
+  --surface: #111310;
+  --surface-2: #161a14;
+  --surface-3: #1d2119;
+  --surface-4: #242920;
+
+  /* ---- hairlines --------------------------------------------------- */
+  --line: #252821;
+  --line-soft: #1a1d17;
+  --line-hi: #353a2e;
+  /* structural rules that carry design weight and must stay legible */
+  --line-lit: rgba(240, 241, 235, 0.24);
+  --line-dim: rgba(240, 241, 235, 0.1);
+
+  /* ---- text -------------------------------------------------------- */
+  --ink: #f0f1eb;
+  --ink-2: #858980;
+  --ink-3: #5c6058;
+  --ink-4: #3b3f37;
+
+  /* ---- acid lime accent -------------------------------------------- */
+  --acid: #b7f56a;
+  --acid-deep: #86cc3c;
+  --acid-tint: rgba(183, 245, 106, 0.14);
+  --acid-line: rgba(183, 245, 106, 0.32);
+  --acid-glow: rgba(183, 245, 106, 0.4);
+  --acid-veil: rgba(183, 245, 106, 0.06);
+
+  /* ---- type -------------------------------------------------------- */
+  --f-display: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --f-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --t-micro: 0.625rem; /*  10px — micro labels            */
+  --t-label: 0.6875rem; /* 11px — technical labels         */
+  --t-flat: 0.75rem; /*  12px — small mono body        */
+  --t-sm: 0.8125rem; /*  13px                           */
+  --t-body: clamp(0.9375rem, 0.2vw + 0.9rem, 1.0625rem);
+  --t-lead: clamp(1.125rem, 0.7vw + 0.95rem, 1.5rem);
+  --t-h4: clamp(1.25rem, 1vw + 1rem, 1.75rem);
+  --t-h3: clamp(1.75rem, 2.2vw + 1.1rem, 3rem);
+  --t-h2: clamp(2.25rem, 4.4vw + 1rem, 5.25rem);
+  --t-h1: clamp(3.25rem, 10vw + 0.5rem, 11rem);
+  --t-mega: clamp(4.5rem, 15.5vw, 17rem);
+
+  --lh-tight: 0.86;
+  --lh-snug: 1.02;
+  --lh-body: 1.62;
+  --tr-mega: -0.045em;
+  --tr-tight: -0.03em;
+  --tr-flat: -0.01em;
+  --tr-label: 0.24em;
+  --tr-label-wide: 0.34em;
+
+  /* ---- rhythm ------------------------------------------------------ */
+  --gutter: clamp(1.125rem, 4.4vw, 4.5rem);
+  --maxw: 1560px;
+  --maxw-read: 62ch;
+  --sec-pad-y: clamp(5.5rem, 12vh, 11rem);
+  --hair: 1px;
+
+  /* ---- motion ------------------------------------------------------ */
+  --ease-out: cubic-bezier(0.16, 0.84, 0.44, 1);
+  --ease-in-out: cubic-bezier(0.62, 0.02, 0.34, 1);
+  --ease-settle: cubic-bezier(0.2, 0.9, 0.24, 1);
+  --ease-spring: cubic-bezier(0.22, 1.06, 0.3, 1);
+  --d-fast: 220ms;
+  --d-mid: 460ms;
+  --d-slow: 900ms;
+
+  /* ---- grain ------------------------------------------------------- */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}

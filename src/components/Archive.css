@@ -1,0 +1,329 @@
+/* ==========================================================================
+   ARCHIVE — an engineering database, not a feature grid.
+   ========================================================================== */
+
+.ar {
+  position: relative;
+  padding-block: var(--sec-pad-y) clamp(3rem, 8vh, 6rem);
+  background: var(--bg);
+  border-block-start: var(--hair) solid var(--line);
+}
+
+.ar-in {
+  display: grid;
+  gap: clamp(2rem, 5.5vh, 3.6rem);
+}
+
+/* --- header -------------------------------------------------------------- */
+
+.ar-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  align-items: end;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.ar-lede {
+  display: grid;
+  gap: clamp(0.9rem, 2.4vh, 1.4rem);
+}
+
+.ar-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.ar-eyebrow-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--acid);
+  flex: none;
+}
+
+.ar-title {
+  display: grid;
+  font-size: clamp(1.7rem, 3.9vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.ar-title-b {
+  color: var(--ink-2);
+  padding-inline-start: clamp(0.8rem, 5vw, 5rem);
+}
+
+.ar-counter {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  padding-block-start: 1rem;
+}
+
+.ar-counter-num {
+  font-size: clamp(1.75rem, 3.6vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--acid);
+}
+
+.ar-counter-lbl {
+  color: var(--ink-3);
+}
+
+.ar-counter-rule {
+  width: 100%;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--acid-line), transparent);
+  margin-block: 0.35rem;
+}
+
+.ar-counter-meta {
+  font-size: var(--t-micro);
+  letter-spacing: 0.18em;
+  color: var(--ink-4);
+}
+
+/* --- table -------------------------------------------------------------- */
+
+.ar-table {
+  border-block-start: var(--hair) solid var(--line-lit);
+}
+
+.ar-row {
+  display: grid;
+  grid-template-columns:
+    8.5rem minmax(0, 1.15fr) minmax(0, 0.85fr)
+    4rem 7rem 8rem;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-block: clamp(0.6rem, 1.35vh, 0.9rem);
+  border-block-end: var(--hair) solid var(--line);
+  position: relative;
+}
+
+.ar-row--head {
+  padding-block: 0.6rem;
+  border-block-end-color: var(--line-lit);
+}
+
+.ar-th {
+  font-size: var(--t-micro);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.ar-num {
+  text-align: right;
+}
+
+.ar-body {
+  display: grid;
+}
+
+.ar-id {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--t-flat);
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+  transition: color 320ms var(--ease-out);
+}
+
+.ar-id-tick {
+  width: 3px;
+  height: 11px;
+  background: var(--ink-4);
+  flex: none;
+  transition: background-color 320ms var(--ease-out);
+}
+
+.ar-row--primary .ar-id-tick {
+  background: var(--acid);
+}
+
+.ar-source {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: 102%;
+  font-size: clamp(1rem, 1.35vw, 1.375rem);
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--ink);
+  min-width: 0;
+  transition: color 320ms var(--ease-out);
+}
+
+.ar-source--redacted {
+  opacity: 0.55;
+}
+
+.ar-cat {
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.ar-rev {
+  font-size: var(--t-flat);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+.ar-digest {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ar-digest i {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: rgba(240, 241, 235, 0.1);
+  position: relative;
+}
+
+.ar-digest i::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: calc(var(--w) * 100%);
+  background: var(--acid-line);
+}
+
+.ar-status {
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.ar-status--acid {
+  color: var(--acid);
+}
+
+.ar-status--dim {
+  color: var(--ink-4);
+}
+
+@media (hover: hover) {
+  .ar-row:not(.ar-row--head) {
+    transition: background-color 300ms var(--ease-out);
+  }
+
+  .ar-row:not(.ar-row--head):hover {
+    background: rgba(183, 245, 106, 0.03);
+  }
+
+  .ar-row:not(.ar-row--head):hover .ar-source,
+  .ar-row:not(.ar-row--head):hover .ar-id {
+    color: var(--acid);
+  }
+
+  .ar-row:not(.ar-row--head):hover .ar-id-tick {
+    background: var(--acid);
+  }
+}
+
+/* --- footer -------------------------------------------------------------- */
+
+.ar-foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ar-foot-mark {
+  width: 7px;
+  height: 7px;
+  border: var(--hair) solid var(--acid-line);
+  flex: none;
+}
+
+.ar-foot-p {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(0.9375rem, 1.35vw, 1.25rem);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+.ar-foot-rule {
+  flex: 1;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--line-lit), transparent);
+  min-width: 1rem;
+}
+
+.ar-foot-meta {
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .ar-head {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1.6rem;
+  }
+
+  .ar-row {
+    grid-template-columns: 7rem minmax(0, 1.2fr) minmax(0, 0.9fr) 3rem 7rem;
+  }
+
+  .ar-th:nth-child(5),
+  .ar-digest {
+    display: none;
+  }
+}
+
+@media (max-width: 780px) {
+  .ar-row {
+    grid-template-columns: 5.6rem minmax(0, 1fr) 6.5rem;
+    gap: 0.35rem 0.8rem;
+    padding-block: 0.85rem;
+  }
+
+  .ar-th:nth-child(3),
+  .ar-cat,
+  .ar-th:nth-child(4),
+  .ar-rev {
+    display: none;
+  }
+
+  .ar-foot {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .ar-foot-rule {
+    display: none;
+  }
+
+  .ar-foot-p {
+    max-width: none;
+    flex: 1 1 12rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .ar-row {
+    grid-template-columns: 5.2rem minmax(0, 1fr) auto;
+  }
+}

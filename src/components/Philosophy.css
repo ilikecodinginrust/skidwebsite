@@ -1,0 +1,352 @@
+/* ==========================================================================
+   PHILOSOPHY — an editorial statement that resolves into a structured map.
+   ========================================================================== */
+
+.ph {
+  position: relative;
+  padding-block: var(--sec-pad-y);
+  background: var(--bg);
+  border-block-end: var(--hair) solid var(--line);
+  overflow: hidden;
+}
+
+.ph::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-lit) 30%, transparent 70%);
+  opacity: 0.5;
+}
+
+.ph-in {
+  display: grid;
+  gap: clamp(3rem, 9vh, 7rem);
+}
+
+/* --------------------------------------------------------------------------
+   the statement
+   -------------------------------------------------------------------------- */
+
+.ph-lede {
+  display: grid;
+  gap: clamp(1.4rem, 4vh, 2.6rem);
+  max-width: 1180px;
+}
+
+.ph-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.ph-eyebrow-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--acid);
+  flex: none;
+}
+
+.ph-title {
+  display: grid;
+  gap: 0.02em;
+  font-size: clamp(2.1rem, 7.1vw, 7.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.ph-line {
+  display: block;
+}
+
+.ph-line--2 {
+  padding-inline-start: clamp(0px, 6vw, 6rem);
+}
+
+.ph-line--3 {
+  padding-inline-start: clamp(0px, 1.5vw, 1rem);
+}
+
+.ph-line--4 {
+  padding-inline-start: clamp(0px, 11vw, 11rem);
+}
+
+/* each word rises out of its own clipped box, then flashes lime and cools */
+.ph-w {
+  display: inline-block;
+  overflow: hidden;
+  padding-block-end: 0.12em;
+  margin-block-end: -0.12em;
+  margin-inline-end: 0.22em;
+  vertical-align: bottom;
+}
+
+.ph-w-i {
+  display: inline-block;
+  transform: translate3d(0, 108%, 0);
+  transition: transform 900ms var(--ease-out);
+  transition-delay: calc(var(--i) * 52ms);
+  color: var(--ink);
+}
+
+.ph-title.is-on .ph-w-i {
+  transform: none;
+  animation: ph-flash 780ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 52ms + 380ms);
+}
+
+@keyframes ph-flash {
+  0% {
+    color: var(--acid);
+  }
+  34% {
+    color: var(--acid);
+  }
+  100% {
+    color: var(--ink);
+  }
+}
+
+.ph-line--4 .ph-w-i {
+  color: var(--ink-2);
+}
+
+.ph-title.is-on .ph-line--4 .ph-w-i {
+  animation-name: ph-flash-dim;
+}
+
+@keyframes ph-flash-dim {
+  0% {
+    color: var(--acid);
+  }
+  34% {
+    color: var(--acid);
+  }
+  100% {
+    color: var(--ink-2);
+  }
+}
+
+/* --- note under the statement --- */
+
+.ph-note {
+  display: grid;
+  gap: clamp(1rem, 2.6vh, 1.8rem);
+  padding-inline-start: clamp(0px, 11vw, 11rem);
+  max-width: 62ch;
+}
+
+.ph-note-body {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.ph-note-p {
+  color: var(--ink-2);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+}
+
+.ph-note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.ph-note-sep {
+  color: var(--acid-deep);
+}
+
+/* --------------------------------------------------------------------------
+   the map — three principles as numbered, unevenly indented rows
+   -------------------------------------------------------------------------- */
+
+.ph-map {
+  position: relative;
+}
+
+.ph-map-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  pointer-events: none;
+}
+
+.ph-map-grid i {
+  border-inline-start: var(--hair) solid var(--line-soft);
+  opacity: 0.85;
+}
+
+.ph-map-grid i:first-child {
+  border-inline-start: 0;
+}
+
+.ph-list {
+  display: grid;
+  position: relative;
+}
+
+.ph-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 0.95fr) minmax(0, 1.25fr) 8rem;
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  padding-block: clamp(1.6rem, 4vh, 2.9rem);
+  padding-inline-start: calc(var(--row) * clamp(0px, 9vw, 9rem));
+  border-block-start: var(--hair) solid var(--line);
+  transition: background-color 420ms var(--ease-out);
+}
+
+.ph-item:last-child {
+  border-block-end: var(--hair) solid var(--line);
+}
+
+.ph-item-num {
+  font-size: var(--t-flat);
+  letter-spacing: 0.22em;
+  color: var(--acid-deep);
+  padding-block-start: 0.55em;
+}
+
+.ph-item-title {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: 104%;
+  font-size: clamp(1.375rem, 2.5vw, 2.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 420ms var(--ease-out);
+}
+
+.ph-item-body {
+  color: var(--ink-2);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  max-width: 46ch;
+  padding-block-start: 0.35em;
+}
+
+.ph-item-meta {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--t-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-block-start: 0.85em;
+  white-space: nowrap;
+}
+
+.ph-item-meta::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--acid-deep);
+  flex: none;
+}
+
+/* the accent bar that grows along the row's top edge on reveal */
+.ph-item-bar {
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline-start: 0;
+  width: 100%;
+  height: var(--hair);
+  background: linear-gradient(90deg, var(--acid), var(--acid-line) 40%, transparent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.ph-item.is-on .ph-item-bar {
+  animation: rule-draw 1100ms var(--ease-out) forwards;
+  animation-delay: calc(var(--rv-delay, 0ms) + 120ms);
+}
+
+@media (hover: hover) {
+  .ph-item:hover {
+    background: rgba(183, 245, 106, 0.025);
+  }
+
+  .ph-item:hover .ph-item-title {
+    color: var(--acid);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1040px) {
+  .ph-item {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    grid-template-areas:
+      'num title'
+      '. body'
+      '. meta';
+    row-gap: 0.7rem;
+    padding-inline-start: 0;
+  }
+
+  .ph-item-num {
+    grid-area: num;
+  }
+
+  .ph-item-title {
+    grid-area: title;
+  }
+
+  .ph-item-body {
+    grid-area: body;
+    max-width: 60ch;
+  }
+
+  .ph-item-meta {
+    grid-area: meta;
+    justify-self: start;
+    padding-block-start: 0.2rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .ph-line--2,
+  .ph-line--4,
+  .ph-note {
+    padding-inline-start: 0;
+  }
+
+  .ph-note {
+    max-width: none;
+  }
+
+  .ph-map-grid {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ph-w-i {
+    transform: none !important;
+    animation: none !important;
+    color: inherit !important;
+  }
+
+  .ph-line--4 .ph-w-i {
+    color: var(--ink-2);
+  }
+
+  .ph-item-bar {
+    transform: scaleX(1) !important;
+  }
+}
